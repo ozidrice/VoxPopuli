@@ -1,0 +1,80 @@
+﻿Toutes les requêtes se font sous la forme : 
+https://www.voxpopuliapi.ozidrice.com/ [ACTION] ? [PARAM1] & [PARAM2] & …
+
+
+L’accès à l’API nécessite en PERMANENCE le paramètre token
+token public : ozqidjodqjdqs
+
+
+ACTION : 
+
+
+{{DISPO TOUT LE TEMPS : }}
+* create_user
+        Crée un nouveau joueur
+   * PARAM : 
+      * pseudo : nom du joueur
+   * RETURN :
+      * Joueur créé
+
+
+* list_user
+        Retourne la liste des joueurs ayant rejoint la partie en cours
+   * RETURN :
+      * Liste des joueur de la partie courante
+
+
+* get_current_game
+        Retourne les infos de la partie en cours (id, etat de la partie, temps restant avant la prochaine phase etc…)
+
+
+* get_status_current_game 
+        Retourne le status de la partie en cours (id, nom et temps restant avant la prochaine phase)
+        
+
+
+
+
+
+
+{{DISPO ETAPE 1 : REJOINDRE LA PARTIE}}
+* join_game
+        Permet à un joueur de rejoindre la courante
+   * PARAM : 
+      * idJoueur : id du joueur
+
+
+{{DISPO ETAPE 2 : QUESTION}}
+* get_current_question
+        Retourne la question courante et ses réponses
+   * RETURN
+      * La question et ses réponses possibles
+
+
+* vote
+        Permet à un joueur de voter
+   * PARAM :
+      * idReponse
+      * idJoueur
+   * RETURN
+      * “OK” si bien pris en compte
+
+
+* get_who_as_voted
+        Retourne les id des joueurs ayant votés
+
+
+
+
+
+
+{{DISPO ETAPE 3 : RESULTATS }}
+* get_votes_current_question
+        Retourne le détail de chaque vote (id du joueur + vote)
+
+
+* get_nb_votes_reponses
+        Retourne le nombre de vote par réponse
+
+
+{{DISPO ETAPE 4 : Fin de la partie}}
