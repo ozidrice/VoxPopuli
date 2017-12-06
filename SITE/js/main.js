@@ -5,7 +5,30 @@ var publictoken = "ozqidjodqjdqs";
 var user = create_user("pseudorandom2");
 //POUR RECUP LES VALEURS = user.then(val => console.log(val));
 var list_participants = list_user();
-var current_game = get_current_game().then(val=>console.log(val));
+var current_game = get_current_game();
+
+
+
+
+update_question();
+
+function update_question(){
+	get_current_question().then((question)=>{
+		set_question(question["question"]["intitule"]);
+		set_reponses(question["list_reponse"]);
+	})	
+}
+
+function set_question(question){
+	document.querySelector("#question p").innerHTML = question;
+}
+
+function set_reponses(str_list){
+	var list_elem_reponses = document.querySelectorAll(".answer");
+	str_list.forEach((rep,key)=>{ 
+
+		list_elem_reponses[key].innerHTML = rep["intitule"]}) 
+}
 
 
 var submit_button = document.querySelector('#submit_button');
@@ -59,6 +82,17 @@ function join_game(idJoueur){
 
 	return fetch_link(url);
 }
+
+/*SI ETAT == 2*/
+function get_current_question(idJoueur){
+	var url = API_link + "get_current_question";
+	var varnames = ["token"];
+	var data = [publictoken];
+	url = createlink(url,data,varnames);
+
+	return fetch_link(url);
+}
+
 
 function fetch_link(link){
 	return fetch(link)
