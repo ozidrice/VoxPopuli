@@ -1,13 +1,26 @@
-
-
 var API_link = "https://voxpopuliapi.ozidrice.com/";
-
+var publictoken = "ozqidjodqjdqs";
 
 
 var user = create_user("pseudorandom2");
 //POUR RECUP LES VALEURS = user.then(val => console.log(val));
 var list_participants = list_user();
 var current_game = get_current_game().then(val=>console.log(val));
+
+
+var submit_button = document.querySelector('#submit_button');
+var connection = document.querySelector('#connection');
+var connection_container = document.querySelector('#connection_container');
+console.log(submit_button);
+
+submit_button.addEventListener('click', function(){
+	connection.style.display = "none";
+	connection_container.classList.add("animation");
+});
+
+
+
+
 
 
 function create_user(pseudo){
