@@ -11,7 +11,7 @@
 
 @font-face {
 	font-family : "Raleway";
-    src : url('../fonts/ThinItalic.ttf');
+    src : url('../fonts/Raleway-ThinItalic.ttf');
     font-weight: 300;
 }
 
@@ -24,6 +24,12 @@
 @font-face {
 	font-family : "Roboto";
     src : url('../fonts/Roboto-Regular.ttf');
+}
+
+@font-face {
+	font-family : "Roboto";
+    src : url('../fonts/Roboto-Italic.ttf');
+    font-style: italic;
 }
     
 html {
@@ -41,6 +47,13 @@ body {
 p {
 	margin: 0px;
 	padding: 0px;
+}
+
+h1 {
+	font-size: 1.7em;
+	font-family: "Roboto", sans-serif;
+	font-style:italic;
+	margin:80px 0px 10px 0px;
 }
 
 #container {
@@ -119,4 +132,46 @@ p {
 	padding:15px 50px;
 	margin: 0px 50px;
 	border:1px solid black;
+}
+
+#infos_bar {
+	color:#fff;
+}
+
+#players_title {
+	text-align: center;
+}
+
+#bar {
+	height:3px;
+	width:70%;
+	background-color: white;
+	display:inline-block;
+}
+
+#players {
+	display: grid;
+	grid-template-columns : 100%;
+	grid-row-gap: 30px;
+	align-items:center;
+	justify-items : center;
+	margin-top:50px;
+}
+
+.player {
+	display: flex;
+
+}
+
+.player p {
+	font-size:1.3em;
+	margin-right: 30px;
+	font-style: "Raleway", sans-serif;
+	font-weight: 300;
+}
+
+.fa {
+	font-size:1.5em;
+	margin-left:5px;
+	color:#d75a4a;
 }
