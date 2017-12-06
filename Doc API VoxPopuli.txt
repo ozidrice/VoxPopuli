@@ -26,10 +26,12 @@ ACTION :
 
 * get_current_game
         Retourne les infos de la partie en cours (id, etat de la partie, temps restant avant la prochaine phase etc…)
+        Retourne les infos de la partie en cours (id, etat de la partie,  etc…)
 
 
 * get_status_current_game 
         Retourne le status de la partie en cours (id, nom et temps restant avant la prochaine phase)
+        Retourne le status de la partie en cours (id, etat, etc..)
         
 
 
