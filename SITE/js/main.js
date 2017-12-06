@@ -6,13 +6,15 @@ var publictoken = "ozqidjodqjdqs";
 
 var user = create_user("pseudorandom2");
 //POUR RECUP LES VALEURS = user.then(val => console.log(val));
-var list_participants = list_user();
 var current_game = get_current_game();
 
 
 
 
 update_question();
+update_users();
+
+
 
 function update_question(){
 	get_current_question().then((question)=>{
@@ -21,6 +23,21 @@ function update_question(){
 	})	
 }
 
+function update_users(){
+	list_user().then((list_user) => {
+		list_user.forEach((user) => set_new_user(user));
+	});
+}
+
+function set_new_user(user){
+	var elem_model_user = document.querySelector("#player_exemple");
+	var elem_new_user = elem_model_user.cloneNode(true);
+	console.log(elem_new_user);
+	elem_new_user.querySelector("p").innerHTML = user["pseudo"];
+	elem_new_user.classList.remove("hidden");
+	document.querySelector("#players").appendChild(elem_new_user);
+	}
+
 function set_question(question){
 	document.querySelector("#question p").innerHTML = question;
 }
@@ -28,9 +45,13 @@ function set_question(question){
 function set_reponses(str_list){
 	var list_elem_reponses = document.querySelectorAll(".answer");
 	str_list.forEach((rep,key)=>{ 
-
-		list_elem_reponses[key].innerHTML = rep["intitule"]}) 
+		list_elem_reponses[key].innerHTML = rep["intitule"];
+	}); 
 }
+
+/*
+* FUNCTIONS GETTING FROM API
+*/
 
 
 function create_user(pseudo){

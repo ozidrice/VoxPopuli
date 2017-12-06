@@ -56,6 +56,10 @@ h1 {
 	margin:80px 0px 10px 0px;
 }
 
+.hidden{
+	display: none!important;
+}
+
 #container {
 	display: flex;
 	height:100%
