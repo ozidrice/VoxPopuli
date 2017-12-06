@@ -1,0 +1,122 @@
+@font-face{
+    font-family : "Raleway";
+    src : url('../fonts/Raleway-Regular.ttf');
+}
+
+@font-face {
+	font-family : "Raleway";
+    src : url('../fonts/Raleway-Thin.ttf');
+    font-weight: 200;
+}
+
+@font-face {
+	font-family : "Raleway";
+    src : url('../fonts/ThinItalic.ttf');
+    font-weight: 300;
+}
+
+@font-face {
+	font-family : "Raleway";
+    src : url('../fonts/Raleway-Medium.ttf');
+    font-weight: 600;
+}
+
+@font-face {
+	font-family : "Roboto";
+    src : url('../fonts/Roboto-Regular.ttf');
+}
+    
+html {
+	height:100%;
+	font-family: "Raleway", sans-serif;
+}
+
+body {
+	margin:0px;
+	padding:0px;
+	height:100%;
+	font-size:17px;
+}
+
+p {
+	margin: 0px;
+	padding: 0px;
+}
+
+#container {
+	display: flex;
+	height:100%
+}
+
+#infos_bar {
+	background-color: #0a5e62;
+	width:25%;
+
+}
+
+#game_bar {
+	width:75%;
+	height:100%;
+	display: flex;
+	flex-wrap : wrap;
+}
+
+#chrono {
+	position:absolute;
+	right:70px;
+	top:45px;
+}
+
+#game {
+	margin: auto;
+}
+
+.size1 {
+	font-size: 1.5em;
+}
+
+.size2 {
+	font-size: 2em;
+}
+
+.size3 {
+	font-size: 3em;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.thin {
+	font-weight:200;
+}
+
+.thinitalic {
+	font-weight: 200;
+	font-style: italic;
+}
+
+.center {
+	text-align: center;
+}
+
+.medium {
+	font-weight: 600;
+}
+
+.roboto {
+	font-family: "Roboto", sans-serif;
+}
+
+
+#answers {
+	display:flex;
+	justify-content: space-between;
+	margin-top: 40px;
+}
+
+.answer {
+	padding:15px 50px;
+	margin: 0px 50px;
+	border:1px solid black;
+}
