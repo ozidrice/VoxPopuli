@@ -1,9 +1,10 @@
 var API_link = "https://voxpopuliapi.ozidrice.com/";
 var publictoken = "ozqidjodqjdqs";
 
-
 var form_user = document.querySelector("#form"); 
 var user;
+var game;
+
 //POUR RECUP LES VALEURS = user.then(val => console.log(val));
 var current_game = get_current_game();
 
@@ -11,6 +12,8 @@ var submit_button = document.querySelector('#submit_button');
 var connection = document.querySelector('#connection');
 var connection_container = document.querySelector('#connection_container');
 var chrono = document.querySelector("#chrono p");
+var players_list = document.querySelector("#players");
+
 form_user.addEventListener("submit",()=>{
 	connection.style.display = "none";
 	connection_container.classList.add("animation");
@@ -20,13 +23,42 @@ form_user.addEventListener("submit",()=>{
 });
 
 window.setInterval(function(){
-  	get_time_left().then((time)=>chrono.innerHTML=time);
+  	update_time();
+  	update_users();
+  	game_loop();
 }, 7000);
 
 
-update_question();
-update_users();
+function game_loop(){
+	game = get_current_game().then((game)=>{
+		var idEtat = game.etat.idEtat;
+		switch(idEtat){
+			case 1:
+				//Rejoindre la partie
 
+				break;
+			case 2:
+				//En partie
+				update_question();
+				break;
+			case 3:
+				//Resultats
+
+				break;
+			default:
+
+				break;
+
+		}
+		console.log(idEtat);
+  	});
+}
+
+
+/*SYNCHRO TEMPS SERVEUR ET TEMPS AFFICHE*/
+function update_time(){
+	get_time_left().then((time)=>chrono.innerHTML=time);
+}
 
 /*UPDATE LA QUESTION ET LES REPONSES COURANTE*/
 function update_question(){
@@ -38,6 +70,7 @@ function update_question(){
 
 /*UPDATE LA LISTE DES JOUEURS DE LA PARTIE COURANTE SUR LA PAGE*/
 function update_users(){
+	players_list.querySelectorAll(".player:not(.hidden)").forEach((elem)=>elem.remove());
 	list_user().then((list_user) => {
 		list_user.forEach((user) => set_new_user(user));
 	});
@@ -49,7 +82,7 @@ function set_new_user(user){
 	var elem_new_user = elem_model_user.cloneNode(true);
 	elem_new_user.querySelector("p").innerHTML = user["pseudo"];
 	elem_new_user.classList.remove("hidden");
-	document.querySelector("#players").appendChild(elem_new_user);
+	players_list.appendChild(elem_new_user);
 	}
 
 /*MODIFIE LA QUESTION AFFICHEE*/
@@ -114,6 +147,7 @@ function join_game(idJoueur){
 	var data = [publictoken,idJoueur];
 	url = createlink(url,data,varnames);
 
+		console.log(url);
 	return fetch_link(url);
 }
 
