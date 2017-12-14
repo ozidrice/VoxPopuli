@@ -83,7 +83,6 @@ h2 {
 	display: flex;
 	justify-content:center;
 	align-items:center;
-	display:none;
 }
 
 .join_button {
@@ -169,18 +168,11 @@ h2 {
 	display:grid;
 	justify-items: center;
 	grid-template-columns: 33% 33% 33%;
-	grid-row-gap: auto 10px auto;
+	grid-gap: 0 10px;
 	margin-top: 40px;
 }
 
-.answer {
-
-}
-
-<<<<<<< HEAD
 .answer.selected{background-color: rgb(150,150,255)}
-=======
->>>>>>> origin/master
 
 .btn {
   color: black;
@@ -259,11 +251,8 @@ h2 {
 	display: grid;
 	grid-template-columns : 100%;
 	grid-row-gap: 30px;
-<<<<<<< HEAD
-	a!lign-items:center;
-=======
->>>>>>> origin/master
-	justify-items:center;
+	justify-items: right;
+    padding-right: 20%;
 }
 
 .player {

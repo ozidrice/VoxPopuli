@@ -10,7 +10,7 @@ var current_game = get_current_game();
 
 var form_user = document.querySelector("#form"); 
 var submit_button = document.querySelector('#submit_button');
-var join_button = document.querySelector(".join_button");
+var join_button = document.querySelector("#join_button");
 var connection = document.querySelector('#connection');
 var connection_container = document.querySelector('#connection_container');
 var chrono = document.querySelector("#chrono p");
@@ -18,6 +18,8 @@ var players_list = document.querySelector("#players");
 var player_infos = document.querySelector("#player_infos");
 var section_join_game = document.querySelector("#join_game");
 var section_game_bar = document.querySelector("#game_bar");
+var waiting_players = document.querySelector('#waiting_players');
+var waiting_start = document.querySelector('waiting_start');
 
 
 form_user.addEventListener("submit",()=>{
@@ -30,6 +32,8 @@ form_user.addEventListener("submit",()=>{
 
 join_button.addEventListener("click",()=>{
 	user.then((userdata)=>join_game(userdata.idJoueur));
+	join_button.classList.add("hidden");
+	waiting_players.classList.remove("hidden");
 });
 
 document.querySelectorAll(".answer").forEach((answer)=>{
@@ -45,6 +49,8 @@ window.setInterval(function(){
   	update_users();
   	game_loop();
 }, 7000);
+
+
 
 
 function game_loop(){
@@ -71,17 +77,6 @@ function game_loop(){
 				console.log("ENDED");
 			default:
 
-<<<<<<< HEAD
-var join_button = document.querySelector('#join_button');
-var waiting_players = document.querySelector('#waiting_players');
-var waiting_start = document.querySelector('waiting_start');
-
-join_button.addEventListener("click",function(){
-	join_button.classList.add("hidden");
-	waiting_players.classList.remove("hidden");
-});
-
-=======
 				break;
 
 		}
@@ -96,7 +91,6 @@ function update_time(){
 		chrono.innerHTML=time;
 	});
 }
->>>>>>> de86999e73ba5297dcab0c5a776a38b7e21ebdd7
 
 /*UPDATE LA QUESTION ET LES REPONSES COURANTE*/
 function update_question(){
