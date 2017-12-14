@@ -169,7 +169,6 @@ h2 {
 	display:grid;
 	justify-items: center;
 	grid-template-columns: 33% 33% 33%;
-	grid-row-gap: auto 10px auto;
 	margin-top: 40px;
 }
 
