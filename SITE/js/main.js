@@ -1,26 +1,48 @@
 var API_link = "https://voxpopuliapi.ozidrice.com/";
 var publictoken = "ozqidjodqjdqs";
 
-var form_user = document.querySelector("#form"); 
+var fontawesomelife = "fa-heart";
+var fontawesomelife_empty = "fa-heart-o";
+
 var user;
 var game;
-
-//POUR RECUP LES VALEURS = user.then(val => console.log(val));
 var current_game = get_current_game();
 
+var form_user = document.querySelector("#form"); 
 var submit_button = document.querySelector('#submit_button');
+var join_button = document.querySelector("#join_button");
 var connection = document.querySelector('#connection');
 var connection_container = document.querySelector('#connection_container');
 var chrono = document.querySelector("#chrono p");
 var players_list = document.querySelector("#players");
+var player_infos = document.querySelector("#player_infos");
+var section_join_game = document.querySelector("#join_game");
+var section_game_bar = document.querySelector("#game_bar");
+var waiting_players = document.querySelector('#waiting_players');
+var waiting_start = document.querySelector('waiting_start');
+
 
 form_user.addEventListener("submit",()=>{
 	connection.style.display = "none";
 	connection_container.classList.add("animation");
 	var pseudo = form_user.querySelector("input#pseudo").value;
 	user = create_user(pseudo);
-	user.then((userdata)=>join_game(userdata.idJoueur));
+	player_infos.querySelector("p").innerHTML = pseudo;
 });
+
+join_button.addEventListener("click",()=>{
+	user.then((userdata)=>join_game(userdata.idJoueur));
+	join_button.classList.add("hidden");
+	waiting_players.classList.remove("hidden");
+});
+
+document.querySelectorAll(".answer").forEach((answer)=>{
+	answer.addEventListener("click",()=>{
+		answer.classList.add("selected");
+		user.then((userdata)=>vote(userdata.idJoueur,answer.id.substr(7)));
+	});
+});
+
 
 window.setInterval(function(){
   	update_time();
@@ -29,24 +51,33 @@ window.setInterval(function(){
 }, 7000);
 
 
+
+
 function game_loop(){
 	game = get_current_game().then((game)=>{
 		var idEtat = game.etat.idEtat;
 		switch(idEtat){
-			case 1:
+			case "1":
 				//Rejoindre la partie
-
+				section_join_game.classList.remove("hidden");
+				section_game_bar.classList.add("hidden");
 				break;
-			case 2:
+			case "2":
 				//En partie
+				section_game_bar.classList.remove("hidden");
+				section_join_game.classList.add("hidden");
 				update_question();
 				break;
-			case 3:
-				//Resultats
+			case "3":
+				//Reponses
 
 				break;
+			case "4":
+				//ENDED
+				console.log("ENDED");
 			default:
 
+<<<<<<< HEAD
 var join_button = document.querySelector('#join_button');
 var waiting_players = document.querySelector('#waiting_players');
 var waiting_start = document.querySelector('waiting_start');
@@ -55,6 +86,8 @@ join_button.addEventListener("click",function(){
 	join_button.classList.add("hidden");
 	waiting_players.classList.remove("hidden");
 });
+=======
+>>>>>>> 5c3397ec0ce04f7d56468eda2794eea3d19ba266
 				break;
 
 		}
@@ -65,7 +98,9 @@ join_button.addEventListener("click",function(){
 
 /*SYNCHRO TEMPS SERVEUR ET TEMPS AFFICHE*/
 function update_time(){
-	get_time_left().then((time)=>chrono.innerHTML=time);
+	get_time_left().then((time)=>{
+		chrono.innerHTML=time;
+	});
 }
 
 /*UPDATE LA QUESTION ET LES REPONSES COURANTE*/
@@ -78,9 +113,8 @@ function update_question(){
 
 /*UPDATE LA LISTE DES JOUEURS DE LA PARTIE COURANTE SUR LA PAGE*/
 function update_users(){
-	players_list.querySelectorAll(".player:not(.hidden)").forEach((elem)=>elem.remove());
 	list_user().then((list_user) => {
-		list_user.forEach((user) => set_new_user(user));
+		list_user.forEach((user) => update_user(user));
 	});
 }
 
@@ -90,8 +124,27 @@ function set_new_user(user){
 	var elem_new_user = elem_model_user.cloneNode(true);
 	elem_new_user.querySelector("p").innerHTML = user["pseudo"];
 	elem_new_user.classList.remove("hidden");
+	elem_new_user.id = "player_"+user["idJoueur"];
 	players_list.appendChild(elem_new_user);
+}
+
+/*MET A JOUR UN UTILISATEUR DEJA AFFICHE OU LE CREE*/
+function update_user(user){
+	var joueurElem = document.querySelector("#player_"+user["idJoueur"]);
+	if(joueurElem != null){
+		joueurElem.querySelectorAll(".fa").forEach((life_elem,i)=>{
+			if(user.vie > i){
+				life_elem.classList.remove(fontawesomelife_empty);
+				life_elem.classList.add(fontawesomelife);
+			}else{
+				life_elem.classList.remove(fontawesomelife);
+				life_elem.classList.add(fontawesomelife_empty);
+			}
+		})
+	}else{
+		set_new_user(user);
 	}
+}
 
 /*MODIFIE LA QUESTION AFFICHEE*/
 function set_question(question){
@@ -102,7 +155,9 @@ function set_question(question){
 function set_reponses(str_list){
 	var list_elem_reponses = document.querySelectorAll(".answer");
 	str_list.forEach((rep,key)=>{ 
-		list_elem_reponses[key].innerHTML = rep["intitule"];
+		var curr_resp = list_elem_reponses[key];
+		curr_resp.querySelector("p").innerHTML = rep["intitule"];
+		curr_resp.id="answer_"+rep["idReponse"];
 	}); 
 }
 
@@ -164,6 +219,15 @@ function get_current_question(idJoueur){
 	var url = API_link + "get_current_question";
 	var varnames = ["token"];
 	var data = [publictoken];
+	url = createlink(url,data,varnames);
+
+	return fetch_link(url);
+}
+
+function vote(idJoueur,idvote){
+	var url = API_link + "vote";
+	var varnames = ["token","idReponse","idJoueur"];
+	var data = [publictoken,idvote,idJoueur];
 	url = createlink(url,data,varnames);
 
 	return fetch_link(url);
