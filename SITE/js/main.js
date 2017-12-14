@@ -77,17 +77,6 @@ function game_loop(){
 				console.log("ENDED");
 			default:
 
-<<<<<<< HEAD
-var join_button = document.querySelector('#join_button');
-var waiting_players = document.querySelector('#waiting_players');
-var waiting_start = document.querySelector('waiting_start');
-
-join_button.addEventListener("click",function(){
-	join_button.classList.add("hidden");
-	waiting_players.classList.remove("hidden");
-});
-=======
->>>>>>> 5c3397ec0ce04f7d56468eda2794eea3d19ba266
 				break;
 
 		}

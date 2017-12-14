@@ -168,10 +168,7 @@ h2 {
 	display:grid;
 	justify-items: center;
 	grid-template-columns: 33% 33% 33%;
-<<<<<<< HEAD
-=======
 	grid-gap: 0 10px;
->>>>>>> 5c3397ec0ce04f7d56468eda2794eea3d19ba266
 	margin-top: 40px;
 }
 
