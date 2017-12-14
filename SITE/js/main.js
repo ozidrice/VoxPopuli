@@ -71,6 +71,17 @@ function game_loop(){
 				console.log("ENDED");
 			default:
 
+<<<<<<< HEAD
+var join_button = document.querySelector('#join_button');
+var waiting_players = document.querySelector('#waiting_players');
+var waiting_start = document.querySelector('waiting_start');
+
+join_button.addEventListener("click",function(){
+	join_button.classList.add("hidden");
+	waiting_players.classList.remove("hidden");
+});
+
+=======
 				break;
 
 		}
@@ -85,6 +96,7 @@ function update_time(){
 		chrono.innerHTML=time;
 	});
 }
+>>>>>>> de86999e73ba5297dcab0c5a776a38b7e21ebdd7
 
 /*UPDATE LA QUESTION ET LES REPONSES COURANTE*/
 function update_question(){

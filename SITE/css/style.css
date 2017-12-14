@@ -73,8 +73,9 @@ h2 {
 #infos_bar {
 	background-color: #0a5e62;
 	width:25%;
-
+	height:100%;
 }
+
 
 #join_game {
 	width:75%;
@@ -82,11 +83,11 @@ h2 {
 	display: flex;
 	justify-content:center;
 	align-items:center;
+	display:none;
 }
 
 .join_button {
 	width:200px;
-	margin-top: 30px;
 	background:none;
 	border:1px solid #000;
 	border-radius: 25px;
@@ -95,6 +96,7 @@ h2 {
 	font-size: 1.1em;
 	text-align: center;
 	transition:all 0.5s;
+	
 }
 
 .join_button:hover {
@@ -104,6 +106,9 @@ h2 {
 	cursor:pointer;
 }
 
+.waiting {
+	font-size: 1.8em;
+}
 
 #game_bar {
 	width:75%;
@@ -161,8 +166,10 @@ h2 {
 
 
 #answers {
-	display:flex;
-	justify-content: space-between;
+	display:grid;
+	justify-items: center;
+	grid-template-columns: 33% 33% 33%;
+	grid-row-gap: auto 10px auto;
 	margin-top: 40px;
 }
 
@@ -170,7 +177,10 @@ h2 {
 
 }
 
+<<<<<<< HEAD
 .answer.selected{background-color: rgb(150,150,255)}
+=======
+>>>>>>> origin/master
 
 .btn {
   color: black;
@@ -179,7 +189,6 @@ h2 {
   font-size: 16px;
   font-weight: 400;
   line-height: 45px;
-  margin: 0 auto 2em;
   max-width: 160px;
   position: relative;
   text-decoration: none;
@@ -188,26 +197,6 @@ h2 {
   background: rgba(255, 255, 255, 0);
   padding:15px 80px;
   text-align: center;
-}
-
-
-@media (min-width: 400px) {
-  .btn {
-    display: inline-block;
-    margin-right: 2.5em;
-  }
-  .btn:nth-of-type(even) {
-    margin-right: 0;
-  }
-}
-
-@media (min-width: 600px) {
-  .btn:nth-of-type(even) {
-    margin-right: 2.5em;
-  }
-  .btn:nth-of-type(5) {
-    margin-right: 0;
-  }
 }
 
 .btn-1 {
@@ -260,23 +249,25 @@ h2 {
 	display:inline-block;
 }
 
+#players_container {
+	height:65%;
+	overflow-y:scroll;
+	margin-top:50px;
+}
+
 #players {
 	display: grid;
 	grid-template-columns : 100%;
 	grid-row-gap: 30px;
+<<<<<<< HEAD
 	a!lign-items:center;
+=======
+>>>>>>> origin/master
 	justify-items:center;
-	/*justify-items : end;*/
-	margin-top:50px;
-	overflow-y:scroll;
-	/*padding: 0 50px;*/
-	height:65%;
 }
 
 .player {
 	display: flex;
-	/*flex-wrap:wrap;*/
-	/*justify-content:center;*/
 }
 
 .player p {
