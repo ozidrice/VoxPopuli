@@ -27,6 +27,15 @@ window.setInterval(function(){
 update_question();
 update_users();
 
+var join_button = document.querySelector('#join_button');
+var waiting_players = document.querySelector('#waiting_players');
+var waiting_start = document.querySelector('waiting_start');
+
+join_button.addEventListener("click",function(){
+	join_button.classList.add("hidden");
+	waiting_players.classList.remove("hidden");
+});
+
 
 /*UPDATE LA QUESTION ET LES REPONSES COURANTE*/
 function update_question(){
