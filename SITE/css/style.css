@@ -110,7 +110,6 @@ h2 {
 	height:100%;
 	display: flex;
 	flex-wrap : wrap;
-	display:none;
 }
 
 #chrono {
@@ -168,10 +167,10 @@ h2 {
 }
 
 .answer {
-	padding:15px 50px;
-	margin: 0px 50px;
-	border:1px solid black;
+
 }
+
+.answer.selected{background-color: rgb(150,150,255)}
 
 .btn {
   color: black;
@@ -265,7 +264,7 @@ h2 {
 	display: grid;
 	grid-template-columns : 100%;
 	grid-row-gap: 30px;
-	align-items:center;
+	a!lign-items:center;
 	justify-items:center;
 	/*justify-items : end;*/
 	margin-top:50px;
