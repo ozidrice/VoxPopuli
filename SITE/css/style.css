@@ -59,6 +59,7 @@ h2 {
 	font-family: "Roboto", sans-serif;
 	font-style:italic;
 	margin:30px 0px 10px 0px;
+	text-transform: uppercase;
 }
 
 .hidden{
@@ -114,6 +115,7 @@ h2 {
 	height:100%;
 	display: flex;
 	flex-wrap : wrap;
+	position:relative;
 }
 
 #chrono {
@@ -124,6 +126,14 @@ h2 {
 
 #game {
 	margin: auto;
+}
+
+#winner {
+	position:absolute;
+	top:15%;
+	left: 50%; 
+  	transform: translate(-50%,-50%);
+  	text-transform: uppercase;
 }
 
 .size1 {
@@ -175,56 +185,120 @@ h2 {
 .answer.selected{background-color: rgb(150,150,255)}
 
 .btn {
-  color: black;
+  position: fixed;
   cursor: pointer;
-  display: block;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 45px;
-  max-width: 160px;
+  color: black;
+  padding: 0.7em calc(0.7em * 1.2) ;
+  display: inline-block;
+  border: 1px solid transparent;
   position: relative;
-  text-decoration: none;
-  text-transform: uppercase;
-  vertical-align: middle;
-  background: rgba(255, 255, 255, 0);
-  padding:15px 80px;
+  margin-bottom: 25px;
   text-align: center;
 }
 
-.btn-1 {
-
-  font-weight: 100;
+.btn .text {
+	font-size: 1.2em;
+	line-height: 20px;
+	padding:10px 0;
+	text-transform: uppercase;
+	font-weight: 100;
+	transform: translate3d(0, 0.7em, 0);
+	display: block;
+	transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1) 0.4s;
 }
 
-.btn-1 svg {
-  height: 70px;
-  left: 0;
+.btn:after {
   position: absolute;
-  top: 0;
-  width: 100%;
+  content: '';
+  bottom: -3px;
+  left: calc(0.7em * 1.2);
+  right: calc(0.7em * 1.2);
+  height: 3px;
+  background: #0a5e62;
+  z-index: -1;
+  transition: transform 0.8s cubic-bezier(1, 0, 0.37, 1) 0.2s, right 0.2s cubic-bezier(0.04, 0.48, 0, 1) 0.6s, left 0.4s cubic-bezier(0.04, 0.48, 0, 1) 0.6s;
+  transform-origin: left;
 }
 
-.btn-1 rect {
-  fill: none;
-  stroke: #0a5e62;
-  stroke-width: 2;
-  stroke-dasharray: 422, 0;
+.line {
+  position: absolute;
+  background: #0a5e62;
 }
 
-.btn-1:hover {
-	cursor:pointer;
-	font-weight: 900;
-	letter-spacing: 1px;
+.line.-right, .line.-left {
+  width: 3px;
+  bottom: 0px;
+  top: 0px;
+  transform: scale3d(1, 0, 1);
 }
 
-.btn-1:hover rect {
-  stroke-width: 5;
-  stroke-dasharray: 15, 310;
-  stroke-dashoffset: 60;
-  -webkit-transition: all 1.35s cubic-bezier(0.19, 1, 0.22, 1);
-  transition: all 1.35s cubic-bezier(0.19, 1, 0.22, 1);
+.line.-top, .line.-bottom {
+  height: 3px;
+  left: 0px;
+  right: 0px;
+  transform: scale3d(0, 1, 1);
 }
 
+.line.-right {
+  right: 0px;
+  transition: transform 0.1s cubic-bezier(1, 0, 0.65, 1.01) 0.23s;
+  transform-origin: top;
+}
+
+.line.-top {
+  top: 0px;
+  transition: transform 0.08s linear 0.43s;
+  transform-origin: left;
+}
+
+.line.-left {
+  left: 0px;
+  transition: transform 0.08s linear 0.51s;
+  transform-origin: bottom;
+}
+
+.line.-bottom {
+  bottom: 0px;
+  transition: transform 0.3s cubic-bezier(1, 0, 0.65, 1.01);
+  transform-origin: right;
+}
+
+.btn:hover .text,.btn:active .text {
+  transform: translate3d(0, 0.2em, 0);
+  transition: transform 0.6s cubic-bezier(0.2, 0, 0, 1) 0.4s;
+}
+
+.btn:hover:after,.btn:active:after {
+  transform: scale3d(0, 1, 1);
+  right: 0px;
+  left: 0px;
+  transform-origin: right;
+  transition: transform 0.2s cubic-bezier(1, 0, 0.65, 1.01) 0.17s, right 0.2s cubic-bezier(1, 0, 0.65, 1.01), left 0s 0.3s;
+}
+
+.btn:hover .line,.btn:active .line {
+  transform: scale3d(1, 1, 1);
+}
+
+.btn:hover .line.-right,.btn:active .line.-right {
+  transition: transform 0.1s cubic-bezier(1, 0, 0.65, 1.01) 0.2s;
+  transform-origin: bottom;
+}
+
+.btn:hover .line.-top,.btn:active .line.-top {
+  transition: transform 0.08s linear 0.4s;
+  transform-origin: right;
+}
+
+.btn:hover .line.-left,.btn:active .line.-left {
+  transition: transform 0.08s linear 0.48s;
+  transform-origin: top;
+}
+
+.btn:hover .line.-bottom,.btn:active .line.-bottom {
+  transition: transform 0.5s cubic-bezier(0, 0.53, 0.29, 1) 0.56s;
+  transform-origin: left;
+}
 
 #infos_bar {
 	color:#fff;
