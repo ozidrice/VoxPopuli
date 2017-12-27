@@ -17,6 +17,7 @@ var chrono = document.querySelector("#chrono p");
 var players_list = document.querySelector("#players");
 var player_infos = document.querySelector("#player_infos");
 var section_join_game = document.querySelector("#join_game");
+var section_winner = document.querySelector("#winner");
 var section_game_bar = document.querySelector("#game_bar");
 var waiting_players = document.querySelector('#waiting_players');
 var waiting_start = document.querySelector('waiting_start');
@@ -44,11 +45,19 @@ document.querySelectorAll(".answer").forEach((answer)=>{
 });
 
 
+var update_interval = 1000; //ms
+var time_since_last_update = 0; //ms
 window.setInterval(function(){
-  	update_time();
-  	update_users();
-  	game_loop();
-}, 7000);
+  	//Update game only if necessary or to resync
+  	var curr_time = chrono.innerHTML;
+  	if(chrono.innerHTML == 0 || time_since_last_update >= 5000){
+  		update_time();
+  		update_users();
+  		game_loop();
+  	}
+  	set_time(curr_time-1);
+	time_since_last_update += update_interval;
+}, update_interval);
 
 
 
@@ -61,11 +70,13 @@ function game_loop(){
 				//Rejoindre la partie
 				section_join_game.classList.remove("hidden");
 				section_game_bar.classList.add("hidden");
+				section_winner.classList.add("hidden");
 				break;
 			case "2":
 				//En partie
 				section_game_bar.classList.remove("hidden");
 				section_join_game.classList.add("hidden");
+				section_winner.classList.add("hidden");
 				update_question();
 				break;
 			case "3":
@@ -74,13 +85,15 @@ function game_loop(){
 				break;
 			case "4":
 				//ENDED
+				section_winner.classList.remove("hidden");
+				section_join_game.classList.add("hidden");
+				section_game_bar.classList.add("hidden");
 				console.log("ENDED");
 			default:
 
 				break;
 
 		}
-		console.log(idEtat);
   	});
 }
 
@@ -88,8 +101,14 @@ function game_loop(){
 /*SYNCHRO TEMPS SERVEUR ET TEMPS AFFICHE*/
 function update_time(){
 	get_time_left().then((time)=>{
-		chrono.innerHTML=time;
+		set_time(time);
 	});
+}
+
+/*SET LE TEMPS AFFICHE A TIME*/
+function set_time(time){
+	if(time >= 0)
+		chrono.innerHTML=time;
 }
 
 /*UPDATE LA QUESTION ET LES REPONSES COURANTE*/
@@ -145,7 +164,7 @@ function set_reponses(str_list){
 	var list_elem_reponses = document.querySelectorAll(".answer");
 	str_list.forEach((rep,key)=>{ 
 		var curr_resp = list_elem_reponses[key];
-		curr_resp.querySelector("p").innerHTML = rep["intitule"];
+		curr_resp.querySelector(".text").innerHTML = rep["intitule"];
 		curr_resp.id="answer_"+rep["idReponse"];
 	}); 
 }
