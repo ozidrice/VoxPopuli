@@ -182,8 +182,6 @@ h2 {
 	margin-top: 40px;
 }
 
-.answer.selected{background-color: rgb(150,150,255)}
-
 .btn {
   position: fixed;
   cursor: pointer;
@@ -201,7 +199,6 @@ h2 {
 	line-height: 20px;
 	padding:10px 0;
 	text-transform: uppercase;
-	font-weight: 100;
 	transform: translate3d(0, 0.7em, 0);
 	display: block;
 	transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1) 0.4s;
@@ -214,7 +211,6 @@ h2 {
   left: calc(0.7em * 1.2);
   right: calc(0.7em * 1.2);
   height: 3px;
-  background: #0a5e62;
   z-index: -1;
   transition: transform 0.8s cubic-bezier(1, 0, 0.37, 1) 0.2s, right 0.2s cubic-bezier(0.04, 0.48, 0, 1) 0.6s, left 0.4s cubic-bezier(0.04, 0.48, 0, 1) 0.6s;
   transform-origin: left;
@@ -222,7 +218,30 @@ h2 {
 
 .line {
   position: absolute;
-  background: #0a5e62;
+}
+
+.red:after {
+	  background: #DE3E59;
+}
+
+.red .line {
+	background-color: #DE3E59;
+}
+
+.green:after {
+	background: #49DE3E;
+}
+
+.green .line {
+	background-color: #49DE3E;
+}
+
+.yellow:after {
+	background:#DED83E; 
+}
+
+.yellow .line {
+	background-color: #DED83E;
 }
 
 .line.-right, .line.-left {
@@ -265,7 +284,7 @@ h2 {
 
 .btn:hover .text,.btn:active .text {
   transform: translate3d(0, 0.2em, 0);
-  transition: transform 0.6s cubic-bezier(0.2, 0, 0, 1) 0.4s;
+  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1) 0.1s;
 }
 
 .btn:hover:after,.btn:active:after {
@@ -296,6 +315,43 @@ h2 {
 }
 
 .btn:hover .line.-bottom,.btn:active .line.-bottom {
+  transition: transform 0.5s cubic-bezier(0, 0.53, 0.29, 1) 0.56s;
+  transform-origin: left;
+}
+
+.selected .text,.btn:active .text {
+  transform: translate3d(0, 0.2em, 0);
+  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1) 0.1s;
+}
+
+.selected:after,.btn:active:after {
+  transform: scale3d(0, 1, 1);
+  right: 0px;
+  left: 0px;
+  transform-origin: right;
+  transition: transform 0.2s cubic-bezier(1, 0, 0.65, 1.01) 0.17s, right 0.2s cubic-bezier(1, 0, 0.65, 1.01), left 0s 0.3s;
+}
+
+.selected .line,.btn:active .line {
+  transform: scale3d(1, 1, 1);
+}
+
+.selected .line.-right,.btn:active .line.-right {
+  transition: transform 0.1s cubic-bezier(1, 0, 0.65, 1.01) 0.2s;
+  transform-origin: bottom;
+}
+
+.selected .line.-top,.btn:active .line.-top {
+  transition: transform 0.08s linear 0.4s;
+  transform-origin: right;
+}
+
+.selected .line.-left,.btn:active .line.-left {
+  transition: transform 0.08s linear 0.48s;
+  transform-origin: top;
+}
+
+.selected .line.-bottom,.btn:active .line.-bottom {
   transition: transform 0.5s cubic-bezier(0, 0.53, 0.29, 1) 0.56s;
   transform-origin: left;
 }
@@ -350,6 +406,33 @@ h2 {
 .hp {
 	margin-left: 30px;
 }
+
+.answer_selected {
+	margin-left: 30px;
+	position: relative;
+}
+
+.answer_color {
+	height:10px;
+	width:10px;
+	border-radius:50px;
+	position:absolute;
+	top:5px;
+}
+
+#red{
+	background-color:#DE3E59;
+}
+
+#green{
+	background-color:#49DE3E;
+}
+
+#yellow{
+	background-color:#DED83E;
+}
+
+
 
 .fa {
 	font-size:1.5em;
