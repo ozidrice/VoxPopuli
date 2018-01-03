@@ -145,7 +145,7 @@ function set_reponses(str_list){
 	var list_elem_reponses = document.querySelectorAll(".answer");
 	str_list.forEach((rep,key)=>{ 
 		var curr_resp = list_elem_reponses[key];
-		curr_resp.querySelector("p").innerHTML = rep["intitule"];
+		curr_resp.querySelector(".text").innerHTML = rep["intitule"];
 		curr_resp.id="answer_"+rep["idReponse"];
 	}); 
 }
