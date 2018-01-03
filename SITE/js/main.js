@@ -17,10 +17,12 @@ var chrono = document.querySelector("#chrono p");
 var players_list = document.querySelector("#players");
 var player_infos = document.querySelector("#player_infos");
 var section_join_game = document.querySelector("#join_game");
+var section_winner = document.querySelector("#winner");
 var section_game_bar = document.querySelector("#game_bar");
 var waiting_players = document.querySelector('#waiting_players');
 var waiting_start = document.querySelector('waiting_start');
-
+var list_reponse = document.querySelectorAll(".answer");
+var list_result = document.querySelectorAll(".result");
 
 form_user.addEventListener("submit",()=>{
 	connection.style.display = "none";
@@ -34,9 +36,11 @@ join_button.addEventListener("click",()=>{
 	user.then((userdata)=>join_game(userdata.idJoueur));
 	join_button.classList.add("hidden");
 	waiting_players.classList.remove("hidden");
+	
 });
 
-document.querySelectorAll(".answer").forEach((answer)=>{
+
+list_reponse.forEach((answer)=>{
 	answer.addEventListener("click",()=>{
 		answer.classList.add("selected");
 		user.then((userdata)=>vote(userdata.idJoueur,answer.id.substr(7)));
@@ -44,43 +48,67 @@ document.querySelectorAll(".answer").forEach((answer)=>{
 });
 
 
+var update_interval = 1000; //ms
+var time_since_last_update = 0; //ms
 window.setInterval(function(){
-  	update_time();
-  	update_users();
-  	game_loop();
-}, 7000);
+  	//Update game only if timer == 0 or to resync 
+  	var curr_time = chrono.innerHTML;
+  	if(curr_time == 0 || time_since_last_update >= 5000){
+  		update_time();
+  		game_loop();
+  	}
+  	set_time(curr_time-1);
+	time_since_last_update += update_interval;
+}, update_interval);
+
+
 
 
 
 
 function game_loop(){
 	game = get_current_game().then((game)=>{
+		
 		var idEtat = game.etat.idEtat;
 		switch(idEtat){
 			case "1":
 				//Rejoindre la partie
-				section_join_game.classList.remove("hidden");
 				section_game_bar.classList.add("hidden");
+				section_winner.classList.add("hidden");
+				section_join_game.classList.remove("hidden");
 				break;
 			case "2":
-				//En partie
-				section_game_bar.classList.remove("hidden");
-				section_join_game.classList.add("hidden");
+				//Question
 				update_question();
+				section_join_game.classList.add("hidden");
+				section_winner.classList.add("hidden");
+				document.querySelectorAll(".result").forEach((result_elem)=>result_elem.classList.add("hidden"));
+				
+				section_game_bar.classList.remove("hidden");
 				break;
 			case "3":
-				//Reponses
-
+				//Resultats Question
+				update_question();
+				list_reponse.forEach((answer)=>{
+					answer.classList.remove("selected");
+				});
+				set_nb_vote_reponse();
 				break;
 			case "4":
-				//ENDED
-				console.log("ENDED");
-			default:
+				//Fin
+				set_winner();
+				section_join_game.classList.add("hidden");
+				section_game_bar.classList.add("hidden");
 
-				break;
-
+				waiting_players.classList.add("hidden");
+				join_button.classList.remove("hidden");
+				players_list.querySelector(".player:not(.hidden)").remove();
+				section_winner.classList.remove("hidden");
 		}
-		console.log(idEtat);
+		if(idEtat != 4){
+			update_users();
+		}
+
   	});
 }
 
@@ -88,8 +116,14 @@ function game_loop(){
 /*SYNCHRO TEMPS SERVEUR ET TEMPS AFFICHE*/
 function update_time(){
 	get_time_left().then((time)=>{
-		chrono.innerHTML=time;
+		set_time(time);
 	});
+}
+
+/*SET LE TEMPS AFFICHE A TIME*/
+function set_time(time){
+	if(time >= 0)
+		chrono.innerHTML=time;
 }
 
 /*UPDATE LA QUESTION ET LES REPONSES COURANTE*/
@@ -133,6 +167,36 @@ function update_user(user){
 	}else{
 		set_new_user(user);
 	}
+}
+
+function set_nb_vote_reponse(){
+	var result_from_db = get_nb_votes_reponses();
+
+	list_reponse.forEach((reponse_elem)=>{
+		id_reponse = reponse_elem.id.substr(7);
+		result_from_db.then((list_result_db)=>{
+			var found = false;
+			var i = 0;
+			while(i < list_result_db.length && found == false){
+				var result_db = list_result_db[i];
+				if(result_db["idReponse"] == id_reponse){
+					reponse_elem.querySelector(".result").innerHTML = list_result_db[id_reponse]["nbVote"];
+					found = true;
+				}
+				i++;
+			}
+			if(found === false){
+				reponse_elem.querySelector(".result").innerHTML = 0;
+			}
+		});
+	});
+	document.querySelectorAll(".result").forEach((result_elem)=>result_elem.classList.remove("hidden"));
+
+}
+
+
+function set_winner(){
+	get_winners().then((user)=>section_winner.querySelector("span").innerHTML = user[0]["pseudo"]);
 }
 
 /*MODIFIE LA QUESTION AFFICHEE*/
@@ -188,7 +252,6 @@ function get_time_left(){
 	var varnames = ["token"];
 	var data = [publictoken];
 	url = createlink(url,data,varnames);
-	console.log(url);
 	return fetch_link(url);
 }
 
@@ -199,7 +262,6 @@ function join_game(idJoueur){
 	var data = [publictoken,idJoueur];
 	url = createlink(url,data,varnames);
 
-		console.log(url);
 	return fetch_link(url);
 }
 
@@ -223,6 +285,43 @@ function vote(idJoueur,idvote){
 }
 
 
+
+/*SI ETAT == 3*/
+/*DETAIL DES VOTES*/
+function get_votes_current_question(){
+	var url = API_link + "get_votes_current_question";
+	var varnames = ["token"];
+	var data = [publictoken];
+	url = createlink(url,data,varnames);
+
+	return fetch_link(url);
+}
+/*NB DE VOTE POUR CHAQUE REPONSE*/
+function get_nb_votes_reponses(){
+	var url = API_link + "get_nb_votes_reponses";
+	var varnames = ["token"];
+	var data = [publictoken];
+	url = createlink(url,data,varnames);
+
+	return fetch_link(url);
+}
+
+
+/*SI ETAT == 4*/
+function get_winners(){
+	var url = API_link + "get_winners";
+	var varnames = ["token"];
+	var data = [publictoken];
+	url = createlink(url,data,varnames);
+
+	return fetch_link(url);
+}
+
+
+
+
+
+
 function fetch_link(link){
 	return fetch(link)
 	.then((response) => response.json())
@@ -242,3 +341,4 @@ function createlink(baselink, datas, varnames){
 	});
 	return baselink;
 }
+
