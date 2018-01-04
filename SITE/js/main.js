@@ -90,13 +90,13 @@ function game_loop(){
 					section_join_game.classList.add("hidden");
 					section_winner.classList.add("hidden");
 					document.querySelectorAll(".result").forEach((result_elem)=>result_elem.classList.add("hidden"));
-					
 					section_game_bar.classList.remove("hidden");
 					break;
 				case "3":
 					//Resultats Question
 					update_question();
 					set_nb_vote_reponse();
+					set_pastille_vote();
 					list_reponse.forEach((answer)=>{
 						answer.classList.remove("selected");
 					});
@@ -184,7 +184,6 @@ function update_user(user){
 
 function set_nb_vote_reponse(){
 	var result_from_db = get_nb_votes_reponses();
-	result_from_db.then((res)=>console.log(res));
 	list_reponse.forEach((reponse_elem)=>{
 		var id_reponse = reponse_elem.id.substr(7);
 		result_from_db.then((list_result_db)=>{
@@ -233,6 +232,29 @@ function set_reponses(str_list){
 	}); 
 }
 
+function set_pastille_vote(){
+	get_votes_current_question().then((list_vote)=>{
+		list_vote.forEach((vote)=>{
+			set_pastille_joueur(vote["idJoueur"],get_pastille_reponse(vote["idReponse"]));
+		});
+	});
+}
+
+function set_pastille_joueur(idJoueur, class_color){
+	 document.querySelector("#player_"+idJoueur).querySelector(".answer_color").classList.add(class_color);
+}
+
+/*RETOURNE LA CLASS DE LA COULEUR DE PASTILLE*/
+function get_pastille_reponse(id_reponse){
+	var i = 0;
+	var list_class = document.querySelector("#answer_"+id_reponse).querySelector(".btn").classList;
+	while(i < list_class.length){
+		if(list_class[i].startsWith("color_"))
+			return list_class[i]
+		i++;
+	}
+	return "color_grey";
+}
 
 
 
