@@ -342,3 +342,13 @@ function createlink(baselink, datas, varnames){
 	return baselink;
 }
 
+var user_infos = document.querySelector("#user_infos");
+var infos_bar = document.querySelector("#infos_bar");
+
+user_infos.addEventListener("click", function(){
+	infos_bar.style.display = "block";
+});
+
+infos_bar.addEventListener("click", function(){
+	infos_bar.style.display = "none";
+});
