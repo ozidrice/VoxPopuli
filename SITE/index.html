@@ -13,21 +13,20 @@
 <body>
 	<div id="container">
 		<div id="chrono">
-			<p class="size2 bold roboto">30s</p>
+			<p class="bold roboto">30s</p>
 		</div>
 		<div id="infos_bar">
-			<div id="player_infos">
+			<div id="player_infos" class="center">
 				<p>blblblbblbl</p>
 			</div>
-			<div id="players_title">
+			<div id="players_title" class="center">
 				<h2>Participants</h2>
 				<div id="bar"></div>
 			</div>
-
 			<div id="players_container">
 				<div id="players">
 					<div id="players">
-						<div class="player hidden" id="player_exemple">
+						<div class="player center hidden" id="player_exemple">
 							<p></p>
 							<div class="hp">
 								<i class="fa fa-heart"></i>
@@ -46,25 +45,22 @@
 		</div>
 		<div id="join_game">
 			<div id="join"> 
-				<div id="join_button" class="join_button">
+				<div id="join_button" class="join_button center">
 					Rejoindre la partie
 				</div>
-				<div id="waiting_players" class="waiting hidden">
+				<div id="waiting_players" class="waiting center hidden">
 					En attente de joueurs supplémentaires...
-				</div>
-				<div id="waiting_start" class="waiting hidden">
-					La partie va bientôt commencer...
 				</div>
 			</div>
 		</div>	
 		<div id="game_bar" class="hidden">
-			<div id="game">
+			<div id="game" class="center">
 				<div id="question">
-					<p class="size3 thinitalic center">What does the fox say ?</p>
+					<p class="thinitalic center">What does the fox say ?</p>
 				</div>
 				<div id="answers">				
 					<div class="answer">
-						<div class="btn red">
+						<div class="btn red center">
 						  <span class="text">1</span>
 						  <span class="line -right"></span>
 						  <span class="line -top"></span>
@@ -76,7 +72,7 @@
 						</div>
 					</div>
 					<div class="answer">
-						<div class="btn green">
+						<div class="btn green center">
 						  <span class="text">2</span>
 						  <span class="line -right"></span>
 						  <span class="line -top"></span>
@@ -88,7 +84,7 @@
 						</div>
 					</div>
 					<div class="answer">
-						<div class="btn yellow">
+						<div class="btn yellow center">
 						  <span class="text">3</span>
 						  <span class="line -right"></span>
 						  <span class="line -top"></span>
@@ -100,14 +96,14 @@
 						</div>
 					</div>
 				</div>
-				
+				<i id="user_infos" class="fa fa-user-circle"></i>
 			</div>
 		</div>
-		<div id="winner" class="size1 roboto bold hidden">
+		<div id="winner" class="roboto bold hidden center">
 			<span>{{NAME}}</span> a gagné !
 		</div>
 	</div>
-	<div id="connection_container" class="connection">
+	<div id="connection_container" class="connection center">
 		<div id="connection">
 			<h1>
 				Vox Populi
