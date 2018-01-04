@@ -20,7 +20,6 @@ var section_join_game = document.querySelector("#join_game");
 var section_winner = document.querySelector("#winner");
 var section_game_bar = document.querySelector("#game_bar");
 var waiting_players = document.querySelector('#waiting_players');
-var waiting_start = document.querySelector('waiting_start');
 var list_reponse = document.querySelectorAll(".answer");
 var list_result = document.querySelectorAll(".result");
 
@@ -299,6 +298,15 @@ function get_votes_current_question(){
 /*NB DE VOTE POUR CHAQUE REPONSE*/
 function get_nb_votes_reponses(){
 	var url = API_link + "get_nb_votes_reponses";
+	var varnames = ["token"];
+	var data = [publictoken];
+	url = createlink(url,data,varnames);
+
+	return fetch_link(url);
+}
+
+function get_reponses_gagnante(){
+	var url = API_link + "get_reponses_gagnante";
 	var varnames = ["token"];
 	var data = [publictoken];
 	url = createlink(url,data,varnames);
