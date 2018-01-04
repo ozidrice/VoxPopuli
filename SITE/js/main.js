@@ -42,8 +42,15 @@ join_button.addEventListener("click",()=>{
 
 list_reponse.forEach((answer)=>{
 	answer.addEventListener("click",()=>{
+		list_reponse.forEach((reponse_elem)=>reponse_elem.classList.remove("selected"));
 		answer.classList.add("selected");
-		user.then((userdata)=>vote(userdata.idJoueur,answer.id.substr(7)));
+		user.then((userdata)=>{
+			vote(userdata.idJoueur,answer.id.substr(7)).then((vote)=>{
+				if(vote != true){
+					console.log("PROBLEM");
+				}
+			});
+		});
 	});
 });
 
@@ -67,49 +74,52 @@ window.setInterval(function(){
 
 
 function game_loop(){
-	game = get_current_game().then((game)=>{
-		
-		var idEtat = game.etat.idEtat;
-		switch(idEtat){
-			case "1":
-				//Rejoindre la partie
-				section_game_bar.classList.add("hidden");
-				section_winner.classList.add("hidden");
-				section_join_game.classList.remove("hidden");
-				break;
-			case "2":
-				//Question
-				update_question();
-				section_join_game.classList.add("hidden");
-				section_winner.classList.add("hidden");
-				document.querySelectorAll(".result").forEach((result_elem)=>result_elem.classList.add("hidden"));
-				
-				section_game_bar.classList.remove("hidden");
-				break;
-			case "3":
-				//Resultats Question
-				update_question();
-				list_reponse.forEach((answer)=>{
-					answer.classList.remove("selected");
-				});
-				set_nb_vote_reponse();
-				break;
-			case "4":
-				//Fin
-				set_winner();
-				section_join_game.classList.add("hidden");
-				section_game_bar.classList.add("hidden");
+	if(game = get_current_game()){
 
-				waiting_players.classList.add("hidden");
-				join_button.classList.remove("hidden");
-				players_list.querySelector(".player:not(.hidden)").remove();
-				section_winner.classList.remove("hidden");
-		}
-		if(idEtat != 4){
-			update_users();
-		}
+		game = game.then((game)=>{
+			var idEtat = game.etat.idEtat;
+			switch(idEtat){
+				case "1":
+					//Rejoindre la partie
+					section_game_bar.classList.add("hidden");
+					section_winner.classList.add("hidden");
+					section_join_game.classList.remove("hidden");
+					break;
+				case "2":
+					//Question
+					update_question();
+					section_join_game.classList.add("hidden");
+					section_winner.classList.add("hidden");
+					document.querySelectorAll(".result").forEach((result_elem)=>result_elem.classList.add("hidden"));
+					
+					section_game_bar.classList.remove("hidden");
+					break;
+				case "3":
+					//Resultats Question
+					update_question();
+					set_nb_vote_reponse();
+					list_reponse.forEach((answer)=>{
+						answer.classList.remove("selected");
+					});
+					break;
+				case "4":
+					//Fin
+					set_winner();
+					section_join_game.classList.add("hidden");
+					section_game_bar.classList.add("hidden");
 
-  	});
+					waiting_players.classList.add("hidden");
+					join_button.classList.remove("hidden");
+					clear_player_list();
+					section_winner.classList.remove("hidden");
+					break;
+			}
+			if(idEtat != 4){
+				update_users();
+			}
+
+	  	});
+	}
 }
 
 
@@ -139,6 +149,10 @@ function update_users(){
 	list_user().then((list_user) => {
 		list_user.forEach((user) => update_user(user));
 	});
+}
+
+function clear_player_list(){
+	players_list.querySelectorAll(".player:not(.hidden)").forEach((player_elem)=>player_elem.remove());
 }
 
 /*CREE UN NOUVEL ELEMENT USER DANS LA PAGE*/
@@ -171,16 +185,16 @@ function update_user(user){
 
 function set_nb_vote_reponse(){
 	var result_from_db = get_nb_votes_reponses();
-
+	result_from_db.then((res)=>console.log(res));
 	list_reponse.forEach((reponse_elem)=>{
-		id_reponse = reponse_elem.id.substr(7);
+		var id_reponse = reponse_elem.id.substr(7);
 		result_from_db.then((list_result_db)=>{
 			var found = false;
 			var i = 0;
-			while(i < list_result_db.length && found == false){
+			while(i < list_result_db.length && found === false){
 				var result_db = list_result_db[i];
 				if(result_db["idReponse"] == id_reponse){
-					reponse_elem.querySelector(".result").innerHTML = list_result_db[id_reponse]["nbVote"];
+					reponse_elem.querySelector(".result").innerHTML = result_db["nbVote"];
 					found = true;
 				}
 				i++;
@@ -196,7 +210,13 @@ function set_nb_vote_reponse(){
 
 
 function set_winner(){
-	get_winners().then((user)=>section_winner.querySelector("span").innerHTML = user[0]["pseudo"]);
+	get_winners().then((user)=>{
+		if(user.length == 0){
+			section_winner.querySelector("span").innerHTML = "Personne n'";
+		}else{
+			section_winner.querySelector("span").innerHTML = user[0]["pseudo"];
+		}
+	});
 }
 
 /*MODIFIE LA QUESTION AFFICHEE*/
@@ -323,12 +343,13 @@ function get_winners(){
 
 
 function fetch_link(link){
-	return fetch(link)
-	.then((response) => response.json())
-	.then((responseData) => {
-		return responseData;
-	})
-	.catch(error => console.warn(error));
+		var err = false;
+	var fetch_resp = fetch(link)
+			.then((response) => response.json())
+		.catch(error => err=true);
+	if(err===true)
+		return fetch_link(link);
+	return fetch_resp;	
 }
 
 function createlink(baselink, datas, varnames){
