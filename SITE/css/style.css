@@ -216,27 +216,27 @@ h2 {
   position: absolute;
 }
 
-.red:after {
+.answer .red:after {
 	  background: #DE3E59;
 }
 
-.red .line {
+.answer .red .line {
 	background-color: #DE3E59;
 }
 
-.green:after {
+.answer .green:after {
 	background: #49DE3E;
 }
 
-.green .line {
+.answer .green .line {
 	background-color: #49DE3E;
 }
 
-.yellow:after {
+.answer .yellow:after {
 	background:#DED83E; 
 }
 
-.yellow .line {
+.answer .yellow .line {
 	background-color: #DED83E;
 }
 
@@ -364,6 +364,7 @@ h2 {
 	font-size: 3em !important;
 	padding-top:50px;
 	display:none;
+	color:#0a5e62 !important;
 }
 
 #infos_bar {
@@ -427,17 +428,22 @@ h2 {
 	border-radius:50px;
 	position:absolute;
 	top:5px;
+	background: transparent;
 }
 
-#red{
+.answer_selected .grey {
+	background-color: #C8C8C8;
+}
+
+.answer_selected .red{
 	background-color:#DE3E59;
 }
 
-#green{
+.answer_selected .green{
 	background-color:#49DE3E;
 }
 
-#yellow{
+.answer_selected .yellow{
 	background-color:#DED83E;
 }
 
