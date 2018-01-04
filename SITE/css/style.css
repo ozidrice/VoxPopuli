@@ -66,6 +66,10 @@ h2 {
 	display: none!important;
 }
 
+.block {
+	display:block !important;
+}
+
 #container {
 	display: flex;
 	height:100%;
