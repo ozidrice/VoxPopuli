@@ -83,6 +83,7 @@ function game_loop(){
 					section_game_bar.classList.add("hidden");
 					section_winner.classList.add("hidden");
 					section_join_game.classList.remove("hidden");
+					clear_pastilles();
 					break;
 				case "2":
 					//Question
@@ -91,6 +92,7 @@ function game_loop(){
 					section_winner.classList.add("hidden");
 					document.querySelectorAll(".result").forEach((result_elem)=>result_elem.classList.add("hidden"));
 					section_game_bar.classList.remove("hidden");
+					clear_pastilles();
 					break;
 				case "3":
 					//Resultats Question
@@ -233,11 +235,23 @@ function set_reponses(str_list){
 }
 
 function set_pastille_vote(){
-	get_votes_current_question().then((list_vote)=>{
-		list_vote.forEach((vote)=>{
-			set_pastille_joueur(vote["idJoueur"],get_pastille_reponse(vote["idReponse"]));
+	players_list.querySelectorAll(".player:not(.hidden)").forEach((player)=>{
+		get_votes_current_question().then((list_vote)=>{
+			var i = 0;
+			var id_joueur = player.id.substr(7);
+			while(i < list_vote.length && list_vote[i]["idJoueur"] !=  id_joueur){
+				i++;
+			}
+			var vote = list_vote[i]; 
+			if(i === list_vote.length){
+				set_pastille_joueur(id_joueur,"color_grey");
+			}
+			else{
+				set_pastille_joueur(id_joueur,get_pastille_reponse(vote["idReponse"]));
+			}
 		});
-	});
+	})
+
 }
 
 function set_pastille_joueur(idJoueur, class_color){
@@ -254,6 +268,15 @@ function get_pastille_reponse(id_reponse){
 		i++;
 	}
 	return "color_grey";
+}
+
+function clear_pastilles(){
+	document.querySelectorAll(".answer_color").forEach((answer_color)=>{
+		answer_color.classList.remove("color_red");
+		answer_color.classList.remove("color_yellow");
+		answer_color.classList.remove("color_green");
+		answer_color.classList.remove("color_grey");
+	})
 }
 
 
