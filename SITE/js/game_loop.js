@@ -76,7 +76,7 @@ function game_loop(){
 					update_question();
 					section_join_game.classList.add("hidden");
 					section_winner.classList.add("hidden");
-					document.querySelectorAll(".result").forEach((result_elem)=>result_elem.classList.add("hidden"));
+					list_result.forEach((result_elem)=>result_elem.classList.add("hidden"));
 					section_game_bar.classList.remove("hidden");
 					clear_pastilles();
 					break;

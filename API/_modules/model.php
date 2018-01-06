@@ -64,6 +64,14 @@ class Model{
 		return new PartieEtat($statement->fetch(PDO::FETCH_ASSOC));
 	}
 
+	function set_partie_etat($idPartie,$idEtat){
+		$statement = $this->conn->prepare("UPDATE VP_Partie SET etat = :idEtat WHERE 	idPartie = :idPartie");
+		return $statement->execute(array(
+			":idPartie"=>$idPartie,
+			":idEtat"=>$idEtat,
+			)); 
+	}
+
 	function get_liste_joueur_partie($idPartie){
 		$statement = $this->conn->prepare("SELECT idJoueur,Vie,pseudo FROM VP_Vies INNER JOIN VP_Joueur USING(idJoueur) WHERE idPartie = ?");
 		$statement->execute(array($idPartie));
@@ -80,6 +88,11 @@ class Model{
 		return $statement->fetch(PDO::FETCH_ASSOC)["nb_alive"] > 1;
 	}
 
+
+	function next_tour($idPartie){
+		$statement = $this->conn->prepare("UPDATE VP_Partie SET tourCourant = tourCourant+1 WHERE idPartie = ?");
+		return $statement->execute(array($idPartie)); 
+	}
 
 
 
@@ -105,11 +118,12 @@ class Model{
 
 	}
 
-	function set_nouvelle_question($idPartie, $idQuestion, $idReponse_1, $idReponse_2, $idReponse_3){
-		$statement = $this->conn->prepare("INSERT INTO VP_QuestionPartie(idPartie,idQuestion,idReponse_1,idReponse_2,idReponse_3) VALUES (:idPartie, :idQuestion,:idReponse_1,:idReponse_2,:idReponse_3)");
+	function set_nouvelle_question($idPartie, $tour, $idQuestion, $idReponse_1, $idReponse_2, $idReponse_3){
+		$statement = $this->conn->prepare("INSERT INTO VP_QuestionPartie(idPartie,tour,idQuestion,idReponse_1,idReponse_2,idReponse_3) VALUES (:idPartie, :tour,:idQuestion,:idReponse_1,:idReponse_2,:idReponse_3)");
 		return $statement->execute(array(
 			":idPartie"=>$idPartie,
 			":idQuestion"=>$idQuestion,
+			":tour"=>$tour,
 			":idReponse_1"=>$idReponse_1,
 			":idReponse_2"=>$idReponse_2,
 			":idReponse_3"=>$idReponse_3,
@@ -117,7 +131,7 @@ class Model{
 	}
 
 	function get_questionCourante($idPartie){
-		$statement = $this->conn->prepare("SELECT * FROM VP_QuestionPartie WHERE idPartie = ? ORDER BY date DESC LIMIT 1");
+		$statement = $this->conn->prepare("SELECT * FROM VP_QuestionPartie WHERE idPartie = ? ORDER BY tour DESC LIMIT 1");
 		$statement->execute(array($idPartie));
 		$data = $statement->fetch(PDO::FETCH_ASSOC);
 		
@@ -185,6 +199,17 @@ class Model{
 			));
 	}
 
+	function getJoueurVivants($idPartie){
+		$statement = $this->conn->prepare("SELECT idJoueur,pseudo,Vie FROM VP_Vies INNER JOIN VP_Joueur USING (idJoueur) WHERE idPartie = ? AND Vie > 0");
+		$statement->execute(array($idPartie));
+		$liste_vie = array();
+
+		foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $value) {
+			$liste_vie[] = new Joueur($value);
+		}
+		return $liste_vie;
+	}
+
 
 	/*________________________
 	*
@@ -192,11 +217,12 @@ class Model{
 	* ________________________
 	*/
 	function set_vote($vote){
-		$statement = $this->conn->prepare("INSERT INTO VP_Votes (idPartie,idQuestion,idReponse,idJoueur) values(:idPartie,:idQuestion,:idReponse,:idJoueur) 
+		$statement = $this->conn->prepare("INSERT INTO VP_Votes (idPartie,tour,idQuestion,idReponse,idJoueur) values(:idPartie,:tour,:idQuestion,:idReponse,:idJoueur) 
 			ON DUPLICATE KEY UPDATE 
 			idReponse = :idReponse");
 		return $statement->execute(array(
 			":idPartie"=>$vote->idPartie,
+			":tour"=>$vote->tour,
 			":idQuestion"=>$vote->idQuestion,
 			":idReponse"=>$vote->idReponse,
 			":idJoueur"=>$vote->idJoueur,
@@ -204,30 +230,67 @@ class Model{
 		
 	}
 
-	function get_vote($idPartie,$idQuestion){
-		$statement = $this->conn->prepare("SELECT * FROM VP_Votes WHERE idPartie = :idPartie AND idQuestion = :idQuestion");
+	function get_liste_votes($idPartie,$idQuestion,$tour){
+		$statement = $this->conn->prepare("SELECT * FROM VP_Votes WHERE idPartie = :idPartie AND idQuestion = :idQuestion AND $tour = :tour");
 		$statement->execute(array(
 			":idPartie"=>$idPartie,
 			":idQuestion"=>$idQuestion,
+			":tour"=>$tour,
+			));
+		return new Vote($statement->fetchAll(PDO::FETCH_ASSOC));
+	}
+
+	function get_vote($idPartie,$idQuestion,$idJoueur,$tour){
+		$statement = $this->conn->prepare("SELECT * FROM VP_Votes WHERE idPartie = :idPartie AND idQuestion = :idQuestion AND idJoueur = :idJoueur AND tour = :tour");
+		$statement->execute(array(
+			":idPartie"=>$idPartie,
+			":idQuestion"=>$idQuestion,
+			":idJoueur"=>$idJoueur,
+			":tour"=>$tour,
 			));
 		return new Vote($statement->fetch(PDO::FETCH_ASSOC));
 	}
 
-	function get_nb_vote_question($idPartie, $idQuestion){
-		$statement = $this->conn->prepare("SELECT idReponse, count(*) as nbVote FROM VP_Votes WHERE idQuestion = :idQuestion AND idPartie = :idPartie GROUP BY idReponse");
-		$statement->execute(array(":idQuestion"=>$idQuestion,"idPartie"=>$idPartie));
+	function get_nb_vote_question($idPartie, $idQuestion, $tour){
+		$statement = $this->conn->prepare("SELECT idReponse, count(*) as nbVote FROM VP_Votes WHERE idQuestion = :idQuestion AND idPartie = :idPartie AND tour = :tour GROUP BY idReponse");
+		$statement->execute(array(":idQuestion"=>$idQuestion,":idPartie"=>$idPartie,":tour"=>$tour));
+
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	function get_reponses_gagnante($idPartie, $idQuestion,$tour){
+		$liste_vote_reponse = $this->get_nb_vote_question($idPartie, $idQuestion,$tour);
+		$taille = sizeof($liste_vote_reponse);
+		if($taille == 0)
+			return array();
+		if($taille == 1)
+			return array($liste_vote_reponse[0]["idReponse"]=>$liste_vote_reponse[0]);
+
+		$curr_max_nb_reponse = $liste_vote_reponse[0]["nbVote"];
+		$array = array();
+		$array[$liste_vote_reponse[0]["idReponse"]] = $liste_vote_reponse[0];
+		
+		for ($i=1; $i<sizeof($liste_vote_reponse); $i++) { 
+			if($liste_vote_reponse[$i]["nbVote"] > $curr_max_nb_reponse){
+				$array = array($liste_vote_reponse[$i]);
+			}elseif($liste_vote_reponse[$i]["nbVote"] == $curr_max_nb_reponse){
+				// var_dump($array);
+				// var_dump($list_reponse[$i]);
+				$array[$liste_vote_reponse[$i]["idReponse"]] = $liste_vote_reponse[$i];
+			}
+		}
+		return $array;
+	}
+
+	function get_who_as_voted($idPartie, $idQuestion,$tour){
+		$statement = $this->conn->prepare("SELECT idJoueur FROM VP_Votes WHERE idQuestion = :idQuestion AND idPartie = :idPartie AND tour = :tour GROUP BY idReponse");
+		$statement->execute(array(":idQuestion"=>$idQuestion,":idPartie"=>$idPartie,":tour"=>$tour));
 		return $statement->fetch(PDO::FETCH_ASSOC);
 	}
 
-	function get_who_as_voted($idPartie, $idQuestion){
-		$statement = $this->conn->prepare("SELECT idJoueur FROM VP_Votes WHERE idQuestion = :idQuestion AND idPartie = :idPartie GROUP BY idReponse");
-		$statement->execute(array(":idQuestion"=>$idQuestion,"idPartie"=>$idPartie));
-		return $statement->fetch(PDO::FETCH_ASSOC);
-	}
-
-	function get_vote_question_joueurs($idPartie, $idQuestion){
-		$statement = $this->conn->prepare("SELECT * FROM VP_Votes WHERE idQuestion = :idQuestion AND idPartie = :idPartie");
-		$statement->execute(array(":idQuestion"=>$idQuestion,"idPartie"=>$idPartie));
+	function get_vote_question_joueurs($idPartie, $idQuestion,$tour){
+		$statement = $this->conn->prepare("SELECT * FROM VP_Votes WHERE idQuestion = :idQuestion AND idPartie = :idPartie AND tour = :tour");
+		$statement->execute(array(":idQuestion"=>$idQuestion,":idPartie"=>$idPartie,":tour"=>$tour));
 		$liste_vote = array();
 		foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $value) {
 			$liste_vote[] = new Vote($value);
@@ -244,7 +307,7 @@ class Model{
 	*/
 	function get_joueur($idJoueur = ""){
 		if($idJoueur == ""){
-			$statement = $this->conn->prepare("SELECT * FROM VP_Vies INNER JOIN VP_Joueur USING(idJoueur)");
+			$statement = $this->conn->prepare("SELECT * FROM VP_Joueur");
 			$statement->execute();
 			$liste_joueurs = array();
 			foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $value) {
@@ -252,13 +315,13 @@ class Model{
 			}
 			return $liste_joueurs;
 		}
-		$statement = $this->conn->prepare("SELECT * FROM VP_Vies INNER JOIN VP_Joueur USING(idJoueur) WHERE idJoueur = ?");
+		$statement = $this->conn->prepare("SELECT * FROM VP_Joueur WHERE idJoueur = ?");
 		$statement->execute(array($idJoueur));
 		return new Joueur($statement->fetch(PDO::FETCH_ASSOC));
 	}
 
 	function ajout_joueur($pseudo){
-		$statement = $this->conn->prepare("SELECT * FROM VP_Vies INNER JOIN VP_Joueur USING(idJoueur) WHERE pseudo = ?");
+		$statement = $this->conn->prepare("SELECT * FROM VP_Joueur WHERE pseudo = ?");
 		$statement->execute(array($pseudo));
 		if($user = $statement->fetch(PDO::FETCH_ASSOC)){
 			return $user["idJoueur"];
