@@ -216,27 +216,27 @@ h2 {
   position: absolute;
 }
 
-.answer .red:after {
+.answer .color_red:after {
 	  background: #DE3E59;
 }
 
-.answer .red .line {
+.answer .color_red .line {
 	background-color: #DE3E59;
 }
 
-.answer .green:after {
+.answer .color_green:after {
 	background: #49DE3E;
 }
 
-.answer .green .line {
+.answer .color_green .line {
 	background-color: #49DE3E;
 }
 
-.answer .yellow:after {
+.answer .color_yellow:after {
 	background:#DED83E; 
 }
 
-.answer .yellow .line {
+.answer .color_yellow .line {
 	background-color: #DED83E;
 }
 
@@ -431,19 +431,19 @@ h2 {
 	background: transparent;
 }
 
-.answer_selected .grey {
+.answer_selected .color_grey {
 	background-color: #C8C8C8;
 }
 
-.answer_selected .red{
+.answer_selected .color_red{
 	background-color:#DE3E59;
 }
 
-.answer_selected .green{
+.answer_selected .color_green{
 	background-color:#49DE3E;
 }
 
-.answer_selected .yellow{
+.answer_selected .color_yellow{
 	background-color:#DED83E;
 }
 
