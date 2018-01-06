@@ -19,7 +19,11 @@ var section_game_bar = document.querySelector("#game_bar");
 var waiting_players = document.querySelector('#waiting_players');
 var list_reponse = document.querySelectorAll(".answer");
 var list_result = document.querySelectorAll(".result");
-<<<<<<< HEAD:SITE/js/main.js
+var user_infos = document.querySelector("#user_infos");
+var infos_bar = document.querySelector("#infos_bar");
+var game_infos = document.querySelector("#game_infos");
+var game_rules_container = document.querySelector("#game_rules_container");
+var game_rules = document.querySelector("#game_rules");
 
 form_user.addEventListener("submit",()=>{
 	connection.style.display = "none";
@@ -74,10 +78,6 @@ list_reponse.forEach((answer)=>{
 		});
 	});
 });
-=======
-var user_infos = document.querySelector("#user_infos");
-var infos_bar = document.querySelector("#infos_bar");
->>>>>>> 784f095b567650577e338300cbdc6e6a0b15febe:SITE/js/game_loop.js
 
 
 var update_interval = 1000; //ms

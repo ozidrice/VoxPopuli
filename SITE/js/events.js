@@ -36,3 +36,16 @@ user_infos.addEventListener("click", function(){
 infos_bar.addEventListener("click", function(){
 	infos_bar.classList.remove("block");
 });
+
+game_infos.addEventListener("click",function(){
+	game_rules_container.classList.remove("hidden");
+	game_rules_container.classList.remove("animation_close_rules");
+	game_rules_container.classList.add("animation_open_rules");
+	setTimeout(function(){game_rules.classList.remove("hidden");}, 2000);
+});
+
+game_rules_container.addEventListener("click",function(){
+	game_rules.classList.add("hidden");
+	game_rules_container.classList.remove("animation_open_rules");
+	game_rules_container.classList.add("animation_close_rules");
+});
