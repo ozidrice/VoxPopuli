@@ -40,46 +40,6 @@ join_button.addEventListener("click",()=>{
 	
 });
 
-/*user.then((userdata)=>test(userdata.idJoueur)); function test(idJoueur){console.log(idJoueur)};
-list_user().then((data)=>test(data)); function test(data){console.log(data[0]["idJoueur"])};
-data.foreach(function(){console.log("test");})
-
-list_user().then((data)=>test(data)); function test(data){data.forEach((data)=>{
-	if(data["idJoueur"] == user.then((userdata)=>{return userdata.idJoueur})){
-		console.log("bonjour");
-	}
-	else{
-		console.log("test");
-	}
-})};*/
-
-
-list_reponse.forEach((answer)=>{
-	answer.addEventListener("click",()=>{
-		list_reponse.forEach((reponse_elem)=>reponse_elem.classList.remove("selected"));
-		user.then((logged_user)=>{
-			list_user().then((users)=>{
-				users.forEach((user)=>{
-					if(user["idJoueur"] == logged_user["idJoueur"]){
-						if(user["vie"] > 0){
-							answer.classList.add("selected");
-							vote(user["idJoueur"],answer.id.substr(7)).then((vote)=>{
-								if(vote != true){
-									console.log("PROBLEM");
-								}
-							});
-						}
-						else {
-							console.log("Plus de vie");
-						}
-					}
-				});
-			});
-		});
-	});
-});
-
-
 var update_interval = 1000; //ms
 var time_since_last_update = 0; //ms
 window.setInterval(function(){
