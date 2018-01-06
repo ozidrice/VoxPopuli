@@ -66,7 +66,7 @@ function vote(idJoueur,idvote){
 	var varnames = ["token","idReponse","idJoueur"];
 	var data = [publictoken,idvote,idJoueur];
 	url = createlink(url,data,varnames);
-
+	console.log(url);
 	return fetch_link(url);
 }
 

@@ -6,7 +6,6 @@ RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 RewriteRule ^sitemap.xml$  index.php?param=sitemap [L]
-RewriteRule ^cron$  cron.php [L]
 RewriteRule ^([^/]+)\.css$  index.php?param=css/$1 [L]
 RewriteRule ^(.+)\.(.+)$  $1.$2 [L]
 RewriteRule ^(.+)\?(.+)$  index.php?param=$1&$2 [QSA,L]

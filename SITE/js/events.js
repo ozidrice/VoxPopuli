@@ -19,11 +19,7 @@ list_reponse.forEach((answer)=>{
 		list_reponse.forEach((reponse_elem)=>reponse_elem.classList.remove("selected"));
 		answer.classList.add("selected");
 		user.then((userdata)=>{
-			vote(userdata.idJoueur,answer.id.substr(7)).then((vote)=>{
-				if(vote != true){
-					console.log("PROBLEM");
-				}
-			});
+			vote(userdata.idJoueur,answer.id.substr(7))
 		});
 	});
 });
