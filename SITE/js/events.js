@@ -16,7 +16,6 @@ join_button.addEventListener("click",()=>{
 list_reponse.forEach((answer)=>{
 	answer.addEventListener("click",()=>{
 		list_reponse.forEach((reponse_elem)=>reponse_elem.classList.remove("selected"));
-<<<<<<< HEAD
 		user.then((logged_user)=>{
 			list_user().then((users)=>{
 				users.forEach((user)=>{
@@ -35,11 +34,6 @@ list_reponse.forEach((answer)=>{
 					}
 				});
 			});
-=======
-		answer.classList.add("selected");
-		user.then((userdata)=>{
-			vote(userdata.idJoueur,answer.id.substr(7))
->>>>>>> e4183c4f304b0de89c4450d32afc4948e6a5981e
 		});
 	});
 });

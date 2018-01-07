@@ -562,13 +562,18 @@ h2 {
 	color:white;
 }
 
+#game_rules h2{
+	width:100%;
+}
+
 #game_rules p {
-	margin: 50px 100px;
+	margin: 50px;
 	font-size: 0.7em;
+	width:70%;
 }
 
 .animation_open_rules {
-	animation : slider_rules_test 2s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+	animation : slider_rules_open 2s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
 }
 
 .animation_close_rules {
@@ -590,7 +595,7 @@ h2 {
 	}
 }
 
-@keyframes slider_rules_test{
+@keyframes slider_rules_open{
 	0%{
 		opacity:0;
 		width:0%;
@@ -673,6 +678,7 @@ h2 {
 	}
 	#game_rules p {
 		margin:25px 25px;
+		width:100%;
 	}
 }
 
