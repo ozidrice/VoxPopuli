@@ -82,10 +82,10 @@ class Model{
 		return $liste_joueurs;
 	}
 
-	function more_thant_one_player_alive($idPartie){
+	function more_thant_two_player_alive($idPartie){
 		$statement = $this->conn->prepare("SELECT count(*) as nb_alive FROM VP_Vies WHERE idPartie = ? AND vie > 0");
 		$statement->execute(array($idPartie));
-		return $statement->fetch(PDO::FETCH_ASSOC)["nb_alive"] > 1;
+		return $statement->fetch(PDO::FETCH_ASSOC)["nb_alive"] > 2;
 	}
 
 
@@ -272,10 +272,10 @@ class Model{
 		
 		for ($i=1; $i<sizeof($liste_vote_reponse); $i++) { 
 			if($liste_vote_reponse[$i]["nbVote"] > $curr_max_nb_reponse){
-				$array = array($liste_vote_reponse[$i]);
+				$array = array();
+				$array[$liste_vote_reponse[$i]["idReponse"]] = $liste_vote_reponse[$i];
+				$curr_max_nb_reponse = $liste_vote_reponse[$i]["nbVote"];
 			}elseif($liste_vote_reponse[$i]["nbVote"] == $curr_max_nb_reponse){
-				// var_dump($array);
-				// var_dump($list_reponse[$i]);
 				$array[$liste_vote_reponse[$i]["idReponse"]] = $liste_vote_reponse[$i];
 			}
 		}

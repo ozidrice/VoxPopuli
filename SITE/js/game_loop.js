@@ -199,8 +199,18 @@ function set_winner(){
 	get_winners().then((user)=>{
 		if(user.length == 0){
 			section_winner.querySelector("span").innerHTML = "Personne n'";
+			section_winner.querySelector("#sing").classList.remove("hidden");
+			section_winner.querySelector("#plur").classList.add("hidden");
 		}else{
-			section_winner.querySelector("span").innerHTML = user[0]["pseudo"];
+			if(user.length == 1){
+				section_winner.querySelector("#noms").innerHTML = user[0]["pseudo"];
+				section_winner.querySelector("#sing").classList.remove("hidden");
+				section_winner.querySelector("#plur").classList.add("hidden");
+			}else{
+				section_winner.querySelector("#noms").innerHTML = user[0]["pseudo"]+" & "+user[1]["pseudo"];
+				section_winner.querySelector("#sing").classList.add("hidden");
+				section_winner.querySelector("#plur").classList.remove("hidden");
+			}
 		}
 	});
 }

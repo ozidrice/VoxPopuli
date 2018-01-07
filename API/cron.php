@@ -22,7 +22,7 @@ Class Cron{
 			$model->set_partie_etat(self::$partieCourante->idPartie,1);
 			
 			
-			while(sizeof($model->get_liste_joueur_partie(self::$partieCourante->idPartie)) < 2){
+			while(sizeof($model->get_liste_joueur_partie(self::$partieCourante->idPartie)) < 3){
 				if($model->get_param_site()["VP_kill"] == 1){
 					echo "KILLED BY BDD";
 					exit();
@@ -39,7 +39,7 @@ Class Cron{
 			$liste_reponse = $model->get_reponse();
 			//PARTIE DURANT LAQUELLE LES JOUEURS REPONDENT A LA QUESTION
 
-			while($model->more_thant_one_player_alive(self::$partieCourante->idPartie)){
+			while($model->more_thant_two_player_alive(self::$partieCourante->idPartie)){
 				$model->next_tour(self::$partieCourante->idPartie);
 				self::$partieCourante = $model->get_partie_courante();		
 				

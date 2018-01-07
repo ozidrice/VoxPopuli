@@ -127,11 +127,9 @@ class apiController extends Controller{
 					$this->jsonErr = json_encode("[ERROR] Impossible action at step [$etatPartieCourant->nom]"); 
 				}
 				break;
-
 				default:
 				$this->jsonErr = json_encode("[ERROR] Invalid action");
 				break;
-				
 			}
 		}else{
 			$this->jsonErr = json_encode("[ERROR] Invalid token");
