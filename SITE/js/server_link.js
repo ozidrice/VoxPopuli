@@ -1,3 +1,4 @@
+// var API_link = "http://localhost/";
 var API_link = "https://voxpopuliapi.ozidrice.com/";
 var publictoken = "ozqidjodqjdqs";
 
@@ -118,7 +119,7 @@ function get_winners(){
 
 
 function fetch_link(link){
-		var err = false;
+	var err = false;
 	var fetch_resp = fetch(link)
 			.then((response) => response.json())
 		.catch(error => err=true);

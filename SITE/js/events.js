@@ -22,11 +22,7 @@ list_reponse.forEach((answer)=>{
 					if(user["idJoueur"] == logged_user["idJoueur"]){
 						if(user["vie"] > 0){
 							answer.classList.add("selected");
-							vote(user["idJoueur"],answer.id.substr(7)).then((vote)=>{
-								if(vote != true){
-									console.log("PROBLEM");
-								}
-							});
+							vote(user["idJoueur"],answer.id.substr(7))
 						}
 						else {
 							console.log("Plus de vie");
