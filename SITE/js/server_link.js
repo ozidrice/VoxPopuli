@@ -1,5 +1,5 @@
-// var API_link = "http://localhost/";
-var API_link = "https://voxpopuliapi.ozidrice.com/";
+var API_link = "http://localhost/";
+// var API_link = "https://voxpopuliapi.ozidrice.com/";
 var publictoken = "ozqidjodqjdqs";
 
 
@@ -123,8 +123,6 @@ function fetch_link(link){
 	var fetch_resp = fetch(link)
 			.then((response) => response.json())
 		.catch(error => err=true);
-	if(err===true)
-		return fetch_link(link);
 	return fetch_resp;	
 }
 
